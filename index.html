@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OfferWorth — Compare Canadian Job Offers by Take-Home Pay</title>
+  <meta name="description" content="Compare two Canadian job offers by estimated take-home pay.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#">OfferWorth</a>
+    <span class="badge">V0.6.5 Prototype</span>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">CANADIAN JOB OFFER COMPARATOR</p>
+      <h1>Compare Canadian Job Offers</h1>
+      <p class="hero-copy">Compare two Canadian job offers using estimated 2026 taxes and statutory payroll deductions. Enter each offer and see the annual, monthly, and per-pay difference.</p>
+      <p class="subtitle">Enter the offer amount as quoted, then choose how often the employer actually pays you.</p>
+    </section>
+
+    <section class="offers" aria-label="Job offers">
+      <article class="card">
+        <div class="card-title">
+          <span class="offer-label">OFFER A</span>
+          <span class="province-code" id="codeA">SK</span>
+        </div>
+
+        <label for="amountA">Pay amount</label>
+        <div class="money-input">
+          <span>$</span>
+          <input id="amountA" type="number" min="0" step="0.01" value="2942.25">
+        </div>
+
+        <label for="basisA">This amount is</label>
+        <select id="basisA"></select>
+
+        <label for="payScheduleA">Paid</label>
+        <select id="payScheduleA"></select>
+
+        <label for="provinceA">Province</label>
+        <select id="provinceA">
+<option value="SK" selected>Saskatchewan</option>
+<option value="AB">Alberta</option>
+<option value="BC">British Columbia</option>
+<option value="MB">Manitoba</option>
+<option value="PE">Prince Edward Island</option>
+<option value="YT">Yukon</option>
+<option value="NT">Northwest Territories</option>
+<option value="NU">Nunavut</option>
+<option value="NL">Newfoundland and Labrador</option>
+<option value="NS">Nova Scotia</option>
+<option value="NB">New Brunswick</option>
+<option value="ON">Ontario</option>
+<option value="QC">Quebec</option>
+</select>
+
+        <div class="annualized">
+          <span>Equivalent annual pay</span>
+          <strong id="annualizedA">$70,614</strong>
+        </div>
+      </article>
+
+      <div class="vs" aria-hidden="true">VS</div>
+
+      <article class="card">
+        <div class="card-title">
+          <span class="offer-label">OFFER B</span>
+          <span class="province-code" id="codeB">ON</span>
+        </div>
+
+        <label for="amountB">Pay amount</label>
+        <div class="money-input">
+          <span>$</span>
+          <input id="amountB" type="number" min="0" step="0.01" value="100000">
+        </div>
+
+        <label for="basisB">This amount is</label>
+        <select id="basisB"></select>
+
+        <label for="payScheduleB">Paid</label>
+        <select id="payScheduleB"></select>
+
+        <label for="provinceB">Province</label>
+        <select id="provinceB">
+<option value="SK" selected>Saskatchewan</option>
+<option value="AB">Alberta</option>
+<option value="BC">British Columbia</option>
+<option value="MB">Manitoba</option>
+<option value="PE">Prince Edward Island</option>
+<option value="YT">Yukon</option>
+<option value="NT">Northwest Territories</option>
+<option value="NU">Nunavut</option>
+<option value="NL">Newfoundland and Labrador</option>
+<option value="NS">Nova Scotia</option>
+<option value="NB">New Brunswick</option>
+<option value="ON">Ontario</option>
+<option value="QC">Quebec</option>
+</select>
+
+        <div class="annualized">
+          <span>Equivalent annual pay</span>
+          <strong id="annualizedB">$100,000</strong>
+        </div>
+      </article>
+    </section>
+
+    <div class="action-row">
+      <button id="compareBtn" type="button">Compare Offers</button>
+      <p class="prototype-note">2026 federal, Saskatchewan/Ontario provincial tax, CPP/CPP2 and EI use CRA parameters.</p>
+    </div>
+
+    <section class="results hidden" id="results" aria-live="polite">
+      <div class="results-heading">
+        <div>
+          <p class="eyebrow">YOUR COMPARISON</p>
+          <h2>Estimated take-home pay</h2>
+        </div>
+        <span class="test-data">2026 TAX ESTIMATE</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Offer A <small id="resultProvinceA">SK</small></th>
+              <th>Offer B <small id="resultProvinceB">ON</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Annualized gross pay</td><td id="grossA"></td><td id="grossB"></td></tr>
+            <tr><td>Federal tax <button class="info" type="button" aria-label="Federal tax information" aria-expanded="false">i<span class="tooltip" role="tooltip"><strong>Federal tax</strong>Uses 2026 federal tax brackets and standard basic tax credits. The percentage beside each offer is the effective rate: federal tax divided by annualized gross pay.</span></button></td><td id="federalA"></td><td id="federalB"></td></tr>
+            <tr><td>Provincial tax <button class="info" type="button" aria-label="Provincial tax information" aria-expanded="false">i<span class="tooltip" role="tooltip"><strong>Provincial tax</strong>Uses the selected province's 2026 rules and applicable basic credits. Ontario also includes surtax, tax reduction and the Ontario Health Premium. The percentage shown is the effective rate.</span></button></td><td id="provincialA"></td><td id="provincialB"></td></tr>
+            <tr><td>CPP / CPP2 <button class="info" type="button" aria-label="CPP / CPP2 information" aria-expanded="false">i<span class="tooltip" role="tooltip"><strong>CPP / CPP2</strong>CPP uses statutory contribution rates, a $3,500 basic exemption and annual contribution limits. CPP2 applies above the first earnings ceiling. The percentage shown is the effective deduction rate, not the statutory rate.</span></button></td><td id="cppA"></td><td id="cppB"></td></tr>
+            <tr><td>EI <button class="info" type="button" aria-label="Employment Insurance (EI) information" aria-expanded="false">i<span class="tooltip" role="tooltip"><strong>Employment Insurance (EI)</strong>EI premiums use the 2026 employee premium rate and stop at the annual maximum. The percentage shown is the effective deduction rate.</span></button></td><td id="eiA"></td><td id="eiB"></td></tr>
+            <tr class="total"><td>Annual take-home</td><td id="netA"></td><td id="netB"></td></tr>
+            <tr><td>Monthly take-home</td><td id="monthlyA"></td><td id="monthlyB"></td></tr>
+            <tr>
+              <td>Estimated take-home per pay <small class="row-note" id="payLabelA"></small></td>
+              <td id="perPayA"></td>
+              <td id="perPayB"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pay-schedule-grid">
+        <div><span>Offer A pay schedule</span><strong id="scheduleA"></strong></div>
+        <div><span>Offer B pay schedule</span><strong id="scheduleB"></strong></div>
+      </div>
+
+      <div class="difference">
+        <span id="differenceAmount">+$0 / month</span>
+        <p id="differenceText">Difference in estimated monthly take-home pay.</p>
+      </div>
+    </section>
+
+    <section class="coming-soon">
+      <div>
+        <p class="eyebrow">NEXT</p>
+        <h2>What is the offer really worth?</h2>
+        <p>Later we'll add pension/RRSP matching, benefits, bonuses and cost of living.</p>
+      </div>
+      <button class="secondary" type="button" disabled>Include cost of living · Coming soon</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>OfferWorth V0.6.5 · For product testing only. Not tax or financial advice.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p><strong>About this estimate</strong></p>
+    <p>OfferWorth provides an annualized estimate for regular employment income using standard/basic tax-credit assumptions. Results may differ from an employer paycheque because payroll withholding can depend on pay dates, TD1 claims, pension or RRSP deductions, bonuses, commissions, benefits, union dues, and other circumstances.</p>
+    <p>This calculator is for general informational purposes and is not tax, legal, or financial advice. Verify important decisions using official CRA and provincial/territorial resources.</p>
+    <p class="footer-meta">2026 tax year · Canada · OfferWorth</p>
+  </div>
+</footer>
+
+</body>
+</html>

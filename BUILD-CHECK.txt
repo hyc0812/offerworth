@@ -1,0 +1,8 @@
+('SEO title', True): PASS
+('meta description', True): PASS
+('viewport', True): PASS
+('favicon', True): PASS
+('disclaimer', True): PASS
+('mobile CSS', True): PASS
+('robots', True): PASS
+('tax engine preserved', True): PASS
