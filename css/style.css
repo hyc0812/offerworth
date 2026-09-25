@@ -66,3 +66,15 @@ button, select { touch-action: manipulation; }
   .results { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .site-footer { margin-top: 2rem; }
 }
+
+
+/* V0.7.1 hotfix: keep inline information buttons circular. */
+button.info {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  padding: 0;
+  flex: 0 0 18px;
+  border-radius: 50%;
+}

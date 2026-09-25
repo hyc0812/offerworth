@@ -1,0 +1,4 @@
+OfferWorth V0.7.1 UI hotfix
+- Restores circular 18x18 information buttons overridden by global 44px button rule.
+- Removes obsolete V0.6.5 / product-testing footer line.
+- No tax calculation logic changed.
