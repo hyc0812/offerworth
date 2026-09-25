@@ -1,2 +1,2 @@
-OfferWorth V0.7 Production Candidate
-Based on V0.6.5 CRA Formula Engine
+OfferWorth V0.7.1
+UI cleanup + production SEO

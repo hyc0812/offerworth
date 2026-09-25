@@ -6,11 +6,13 @@
   <title>OfferWorth — Compare Canadian Job Offers by Take-Home Pay</title>
   <meta name="description" content="Compare two Canadian job offers by estimated take-home pay.">
   <link rel="stylesheet" href="css/style.css">
+<link rel="canonical" href="https://offerworth.pages.dev/">
+<meta property="og:url" content="https://offerworth.pages.dev/">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="#">OfferWorth</a>
-    <span class="badge">V0.6.5 Prototype</span>
+    <span class="badge"></span>
   </header>
 
   <main class="container">
@@ -28,13 +30,13 @@
           <span class="province-code" id="codeA">SK</span>
         </div>
 
-        <label for="amountA">Pay amount</label>
+        <label for="amountA">Offer amount</label>
         <div class="money-input">
           <span>$</span>
-          <input id="amountA" type="number" min="0" step="0.01" value="2942.25">
+          <input id="amountA" type="number" min="0" step="0.01"  placeholder="Enter amount">
         </div>
 
-        <label for="basisA">This amount is</label>
+        <label for="basisA">Amount frequency</label>
         <select id="basisA"></select>
 
         <label for="payScheduleA">Paid</label>
@@ -71,13 +73,13 @@
           <span class="province-code" id="codeB">ON</span>
         </div>
 
-        <label for="amountB">Pay amount</label>
+        <label for="amountB">Offer amount</label>
         <div class="money-input">
           <span>$</span>
-          <input id="amountB" type="number" min="0" step="0.01" value="100000">
+          <input id="amountB" type="number" min="0" step="0.01"  placeholder="Enter amount">
         </div>
 
-        <label for="basisB">This amount is</label>
+        <label for="basisB">Amount frequency</label>
         <select id="basisB"></select>
 
         <label for="payScheduleB">Paid</label>
@@ -109,7 +111,7 @@
 
     <div class="action-row">
       <button id="compareBtn" type="button">Compare Offers</button>
-      <p class="prototype-note">2026 federal, Saskatchewan/Ontario provincial tax, CPP/CPP2 and EI use CRA parameters.</p>
+      <p class="prototype-note">Uses 2026 federal and provincial/territorial tax parameters, CPP/QPP, EI, and QPIP where applicable.</p>
     </div>
 
     <section class="results hidden" id="results" aria-live="polite">

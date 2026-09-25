@@ -382,3 +382,17 @@ document.querySelector("#compareBtn").addEventListener("click",()=>{
 
 
 document.querySelectorAll(".info").forEach(btn=>{btn.addEventListener("click",e=>{e.stopPropagation();const open=!btn.classList.contains("is-open");document.querySelectorAll(".info.is-open").forEach(x=>{x.classList.remove("is-open");x.setAttribute("aria-expanded","false")});if(open){btn.classList.add("is-open");btn.setAttribute("aria-expanded","true")}})});document.addEventListener("click",()=>document.querySelectorAll(".info.is-open").forEach(x=>{x.classList.remove("is-open");x.setAttribute("aria-expanded","false")}));document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".info.is-open").forEach(x=>{x.classList.remove("is-open");x.setAttribute("aria-expanded","false")})});
+
+
+function updateOfferAmountPlaceholders(){
+  document.querySelectorAll(".offer-card").forEach(card=>{
+    const input=card.querySelector('input[type="number"]');
+    const selects=card.querySelectorAll("select");
+    if(!input || !selects.length) return;
+    const examples={annual:"100,000",monthly:"8,333.33",semimonthly:"4,166.67",biweekly:"3,846.15",weekly:"1,923.08"};
+    const refresh=()=>{ input.placeholder=examples[selects[0].value.toLowerCase()] || "Enter amount"; };
+    refresh();
+    selects[0].addEventListener("change",refresh);
+  });
+}
+document.addEventListener("DOMContentLoaded",updateOfferAmountPlaceholders);
