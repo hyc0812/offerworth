@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://offerworth.pages.dev/sitemap.xml
+Sitemap: https://offerworth.app/sitemap.xml
