@@ -27,7 +27,7 @@
       <article class="card">
         <div class="card-title">
           <span class="offer-label">OFFER A</span>
-          <span class="province-code" id="codeA">SK</span>
+          <span class="province-code" id="codeA"></span>
         </div>
 
         <label for="amountA">Offer amount</label>
@@ -39,12 +39,13 @@
         <label for="basisA">Amount frequency</label>
         <select id="basisA"></select>
 
-        <label for="payScheduleA">Paid</label>
+        <label for="payScheduleA">Pay schedule</label>
         <select id="payScheduleA"></select>
 
         <label for="provinceA">Province</label>
         <select id="provinceA">
-<option value="SK" selected>Saskatchewan</option>
+<option value="" selected disabled>Select province</option>
+<option value="SK">Saskatchewan</option>
 <option value="AB">Alberta</option>
 <option value="BC">British Columbia</option>
 <option value="MB">Manitoba</option>
@@ -61,7 +62,7 @@
 
         <div class="annualized">
           <span>Equivalent annual pay</span>
-          <strong id="annualizedA">$70,614</strong>
+          <strong id="annualizedA">$0.00</strong>
         </div>
       </article>
 
@@ -70,7 +71,7 @@
       <article class="card">
         <div class="card-title">
           <span class="offer-label">OFFER B</span>
-          <span class="province-code" id="codeB">ON</span>
+          <span class="province-code" id="codeB"></span>
         </div>
 
         <label for="amountB">Offer amount</label>
@@ -82,12 +83,13 @@
         <label for="basisB">Amount frequency</label>
         <select id="basisB"></select>
 
-        <label for="payScheduleB">Paid</label>
+        <label for="payScheduleB">Pay schedule</label>
         <select id="payScheduleB"></select>
 
         <label for="provinceB">Province</label>
         <select id="provinceB">
-<option value="SK" selected>Saskatchewan</option>
+<option value="" selected disabled>Select province</option>
+<option value="SK">Saskatchewan</option>
 <option value="AB">Alberta</option>
 <option value="BC">British Columbia</option>
 <option value="MB">Manitoba</option>
@@ -104,7 +106,7 @@
 
         <div class="annualized">
           <span>Equivalent annual pay</span>
-          <strong id="annualizedB">$100,000</strong>
+          <strong id="annualizedB">$0.00</strong>
         </div>
       </article>
     </section>
@@ -128,8 +130,8 @@
           <thead>
             <tr>
               <th></th>
-              <th>Offer A <small id="resultProvinceA">SK</small></th>
-              <th>Offer B <small id="resultProvinceB">ON</small></th>
+              <th>Offer A <small id="resultProvinceA"></small></th>
+              <th>Offer B <small id="resultProvinceB"></small></th>
             </tr>
           </thead>
           <tbody>

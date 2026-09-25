@@ -37,9 +37,8 @@ const provinceA=document.querySelector("#provinceA"), provinceB=document.querySe
 const basisA=document.querySelector("#basisA"), basisB=document.querySelector("#basisB");
 const scheduleA=document.querySelector("#payScheduleA"), scheduleB=document.querySelector("#payScheduleB");
 
-fillSelect(provinceA,provinces,"SK"); fillSelect(provinceB,provinces,"ON");
-fillSelect(basisA,amountBases,"semimonthly"); fillSelect(basisB,amountBases,"annual");
-fillSelect(scheduleA,paySchedules,"semimonthly"); fillSelect(scheduleB,paySchedules,"biweekly");
+fillSelect(basisA,amountBases,"annual"); fillSelect(basisB,amountBases,"annual");
+fillSelect(scheduleA,paySchedules,"biweekly"); fillSelect(scheduleB,paySchedules,"biweekly");
 
 function money(v,cents=false){
   return new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD",
@@ -334,7 +333,8 @@ function refresh(side){
 
 document.querySelector("#compareBtn").addEventListener("click",()=>{
   const oa=offerState("A"), ob=offerState("B");
-  if(oa.amount<=0||ob.amount<=0){alert("Please enter a pay amount greater than $0 for both offers.");return;}
+  if(oa.amount<=0||ob.amount<=0){alert("Please enter an offer amount greater than $0 for both offers.");return;}
+  if(!oa.province||!ob.province){alert("Please select a province or territory for both offers.");return;}
   const a=prototypeCalculation(oa.annual,oa.province);
   const b=prototypeCalculation(ob.annual,ob.province);
   const pensionLabel=document.querySelector("[data-pension-label]") || [...document.querySelectorAll("td")].find(x=>x.textContent.includes("CPP / CPP2"));
@@ -385,7 +385,7 @@ document.querySelectorAll(".info").forEach(btn=>{btn.addEventListener("click",e=
 
 
 function updateOfferAmountPlaceholders(){
-  document.querySelectorAll(".offer-card").forEach(card=>{
+  document.querySelectorAll(".card").forEach(card=>{
     const input=card.querySelector('input[type="number"]');
     const selects=card.querySelectorAll("select");
     if(!input || !selects.length) return;
