@@ -68,6 +68,106 @@ button, select { touch-action: manipulation; }
 }
 
 
+
+/* V0.7.5 mobile results: remove horizontal scrolling and stack comparison values. */
+@media (max-width: 720px) {
+  .results {
+    overflow-x: visible;
+  }
+
+  .table-wrap {
+    overflow-x: visible;
+    margin-top: 22px;
+  }
+
+  .table-wrap table {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .table-wrap thead {
+    display: none;
+  }
+
+  .table-wrap tbody {
+    display: block;
+  }
+
+  .table-wrap tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 14px 0;
+    border-bottom: 1px solid #eef1f5;
+  }
+
+  .table-wrap td {
+    display: block;
+    border-bottom: 0;
+    padding: 4px 8px;
+    text-align: right;
+  }
+
+  .table-wrap td:first-child {
+    grid-column: 1 / -1;
+    text-align: left;
+    padding-bottom: 9px;
+    font-weight: 700;
+    color: #344054;
+  }
+
+  .table-wrap td:nth-child(2)::before,
+  .table-wrap td:nth-child(3)::before {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    color: #98a2b3;
+  }
+
+  .table-wrap td:nth-child(2)::before {
+    content: "OFFER A";
+  }
+
+  .table-wrap td:nth-child(3)::before {
+    content: "OFFER B";
+  }
+
+  .table-wrap td:nth-child(2) {
+    text-align: left;
+  }
+
+  .table-wrap td:nth-child(3) {
+    text-align: right;
+  }
+
+  .table-wrap tr.total {
+    border-top: 2px solid #dfe4ea;
+  }
+
+  .table-wrap tr.total td {
+    font-weight: 850;
+  }
+
+  .results-heading {
+    gap: 12px;
+  }
+
+  .results h2 {
+    font-size: 23px;
+    line-height: 1.08;
+  }
+
+  .test-data {
+    flex: 0 0 auto;
+    max-width: 118px;
+    text-align: center;
+    line-height: 1.25;
+  }
+}
+
 /* V0.7.1 hotfix: keep inline information buttons circular. */
 button.info {
   width: 18px;
