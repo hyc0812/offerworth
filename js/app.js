@@ -437,23 +437,33 @@ async function shareComparison(){
   }
 
   const url=buildComparisonShareURL();
-  const text=`Compare these two Canadian job offers on OfferWorth: Offer A ${money(oa.annual)} (${oa.province}) vs Offer B ${money(ob.annual)} (${ob.province}).`;
 
+  /*
+   * V0.7.9:
+   * Share only the comparison URL through the native share sheet.
+   *
+   * Some iOS apps, including messaging apps, can behave inconsistently
+   * when title + text + URL are supplied together. The URL already
+   * contains the user's complete Offer A / Offer B inputs, so sharing
+   * the URL alone is sufficient and gives the receiving app the
+   * cleanest possible payload.
+   */
   try{
     if(navigator.share){
-      await navigator.share({
-        title:"OfferWorth comparison",
-        text,
-        url
-      });
-      status.textContent="Comparison shared.";
-      trackShareComparison("native_share");
-      return;
+      const shareData={url};
+
+      if(!navigator.canShare || navigator.canShare(shareData)){
+        await navigator.share(shareData);
+        status.textContent="Shared.";
+        trackShareComparison("native_share_url");
+        return;
+      }
     }
 
     await navigator.clipboard.writeText(url);
-    status.textContent="Link copied — ready to share.";
+    status.textContent="Link copied — ready to send to a friend.";
     trackShareComparison("copy_link");
+
   }catch(err){
     if(err && err.name==="AbortError"){
       status.textContent="";
@@ -462,7 +472,7 @@ async function shareComparison(){
 
     try{
       await navigator.clipboard.writeText(url);
-      status.textContent="Link copied — ready to share.";
+      status.textContent="Link copied — ready to send to a friend.";
       trackShareComparison("copy_link");
     }catch(copyErr){
       window.prompt("Copy this comparison link:",url);

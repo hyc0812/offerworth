@@ -203,36 +203,45 @@ button.info {
   color: #667085;
 }
 
-/* V0.7.8: viewport-safe mobile information tooltips */
+/* V0.7.9: iOS-safe mobile information tooltips */
 @media (max-width: 720px) {
   .info .tooltip {
-    position: fixed;
+    position: fixed !important;
     display: block;
-    z-index: 1000;
-    left: 50%;
-    right: auto;
-    bottom: 24px;
-    width: calc(100vw - 32px);
-    max-width: 340px;
-    min-width: 0;
+    z-index: 9999;
+
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 20px !important;
+
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
     height: auto;
-    max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 40px);
     overflow-y: auto;
+
     padding: 16px 18px;
     margin: 0;
-    transform: translateX(-50%);
+
+    transform: none !important;
+
     white-space: normal;
     overflow-wrap: break-word;
     word-break: normal;
+
     text-align: left;
     line-height: 1.5;
+
+    box-sizing: border-box;
     -webkit-overflow-scrolling: touch;
   }
 
   .info:hover .tooltip,
   .info:focus-visible .tooltip,
   .info.is-open .tooltip {
-    transform: translateX(-50%);
+    transform: none !important;
   }
 
   .share-btn {
