@@ -396,3 +396,130 @@ function updateOfferAmountPlaceholders(){
   });
 }
 document.addEventListener("DOMContentLoaded",updateOfferAmountPlaceholders);
+
+
+// V0.7.8: share and restore the user's current comparison.
+function buildComparisonShareURL(){
+  const oa=offerState("A");
+  const ob=offerState("B");
+
+  const url=new URL(window.location.origin + window.location.pathname);
+
+  url.searchParams.set("a", String(oa.amount));
+  url.searchParams.set("ab", oa.basis);
+  url.searchParams.set("as", oa.schedule);
+  url.searchParams.set("ap", oa.province);
+
+  url.searchParams.set("b", String(ob.amount));
+  url.searchParams.set("bb", ob.basis);
+  url.searchParams.set("bs", ob.schedule);
+  url.searchParams.set("bp", ob.province);
+
+  return url.toString();
+}
+
+function trackShareComparison(method){
+  if(typeof window.gtag==="function"){
+    window.gtag("event","share_comparison",{
+      method: method
+    });
+  }
+}
+
+async function shareComparison(){
+  const oa=offerState("A");
+  const ob=offerState("B");
+  const status=document.querySelector("#shareStatus");
+
+  if(oa.amount<=0 || ob.amount<=0 || !oa.province || !ob.province){
+    alert("Please complete both offers before sharing.");
+    return;
+  }
+
+  const url=buildComparisonShareURL();
+  const text=`Compare these two Canadian job offers on OfferWorth: Offer A ${money(oa.annual)} (${oa.province}) vs Offer B ${money(ob.annual)} (${ob.province}).`;
+
+  try{
+    if(navigator.share){
+      await navigator.share({
+        title:"OfferWorth comparison",
+        text,
+        url
+      });
+      status.textContent="Comparison shared.";
+      trackShareComparison("native_share");
+      return;
+    }
+
+    await navigator.clipboard.writeText(url);
+    status.textContent="Link copied — ready to share.";
+    trackShareComparison("copy_link");
+  }catch(err){
+    if(err && err.name==="AbortError"){
+      status.textContent="";
+      return;
+    }
+
+    try{
+      await navigator.clipboard.writeText(url);
+      status.textContent="Link copied — ready to share.";
+      trackShareComparison("copy_link");
+    }catch(copyErr){
+      window.prompt("Copy this comparison link:",url);
+      status.textContent="Comparison link ready.";
+      trackShareComparison("manual_copy");
+    }
+  }
+}
+
+function restoreSharedComparison(){
+  const params=new URLSearchParams(window.location.search);
+
+  const required=["a","ab","as","ap","b","bb","bs","bp"];
+  if(!required.every(key=>params.has(key))) return;
+
+  const validBasis=value=>Object.prototype.hasOwnProperty.call(amountBases,value);
+  const validSchedule=value=>Object.prototype.hasOwnProperty.call(paySchedules,value);
+  const validProvince=value=>[...provinceA.options].some(o=>o.value===value);
+
+  const a=Number(params.get("a"));
+  const b=Number(params.get("b"));
+  const ab=params.get("ab");
+  const as=params.get("as");
+  const ap=params.get("ap");
+  const bb=params.get("bb");
+  const bs=params.get("bs");
+  const bp=params.get("bp");
+
+  if(
+    !Number.isFinite(a) || a<=0 ||
+    !Number.isFinite(b) || b<=0 ||
+    !validBasis(ab) || !validBasis(bb) ||
+    !validSchedule(as) || !validSchedule(bs) ||
+    !validProvince(ap) || !validProvince(bp)
+  ){
+    return;
+  }
+
+  document.querySelector("#amountA").value=a;
+  document.querySelector("#basisA").value=ab;
+  document.querySelector("#payScheduleA").value=as;
+  document.querySelector("#provinceA").value=ap;
+
+  document.querySelector("#amountB").value=b;
+  document.querySelector("#basisB").value=bb;
+  document.querySelector("#payScheduleB").value=bs;
+  document.querySelector("#provinceB").value=bp;
+
+  refresh("A");
+  refresh("B");
+
+  document.querySelector("#compareBtn").click();
+}
+
+const shareBtn=document.querySelector("#shareBtn");
+if(shareBtn){
+  shareBtn.addEventListener("click",shareComparison);
+}
+
+restoreSharedComparison();
