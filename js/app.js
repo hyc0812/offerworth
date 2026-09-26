@@ -439,44 +439,66 @@ async function shareComparison(){
   const url=buildComparisonShareURL();
 
   /*
-   * V0.7.9:
-   * Share only the comparison URL through the native share sheet.
+   * V0.7.10
    *
-   * Some iOS apps, including messaging apps, can behave inconsistently
-   * when title + text + URL are supplied together. The URL already
-   * contains the user's complete Offer A / Offer B inputs, so sharing
-   * the URL alone is sufficient and gives the receiving app the
-   * cleanest possible payload.
+   * Send the comparison as ordinary text rather than using the
+   * Web Share API "url" member. This is more compatible with
+   * messaging targets that do not handle URL-only share payloads
+   * consistently.
+   *
+   * The URL itself still contains the user's current Offer A and
+   * Offer B inputs.
    */
+  const shareText=
+    "Compare these two Canadian job offers on OfferWorth:\n" +
+    url;
+
   try{
     if(navigator.share){
-      const shareData={url};
+      const shareData={
+        text: shareText
+      };
 
       if(!navigator.canShare || navigator.canShare(shareData)){
         await navigator.share(shareData);
+
         status.textContent="Shared.";
-        trackShareComparison("native_share_url");
+        trackShareComparison("native_share_text");
         return;
       }
     }
 
-    await navigator.clipboard.writeText(url);
-    status.textContent="Link copied — ready to send to a friend.";
-    trackShareComparison("copy_link");
+    await navigator.clipboard.writeText(shareText);
+
+    status.textContent=
+      "Comparison link copied — paste it into a message.";
+
+    trackShareComparison("copy_text");
 
   }catch(err){
+
     if(err && err.name==="AbortError"){
       status.textContent="";
       return;
     }
 
     try{
-      await navigator.clipboard.writeText(url);
-      status.textContent="Link copied — ready to send to a friend.";
-      trackShareComparison("copy_link");
+      await navigator.clipboard.writeText(shareText);
+
+      status.textContent=
+        "Comparison link copied — paste it into a message.";
+
+      trackShareComparison("copy_text");
+
     }catch(copyErr){
-      window.prompt("Copy this comparison link:",url);
-      status.textContent="Comparison link ready.";
+
+      window.prompt(
+        "Copy this comparison and send it to your friend:",
+        shareText
+      );
+
+      status.textContent="Comparison ready to copy.";
+
       trackShareComparison("manual_copy");
     }
   }
@@ -533,3 +555,112 @@ if(shareBtn){
 }
 
 restoreSharedComparison();
+
+
+// V0.7.10: mobile information modal.
+// Desktop keeps the existing hover/focus tooltip.
+// Mobile copies the tooltip content into a top-level modal so
+// iOS Safari does not have to position a tooltip inside a table.
+
+(function setupMobileInfoModal(){
+
+  const modal=document.querySelector("#mobileInfoModal");
+  const title=document.querySelector("#mobileInfoTitle");
+  const body=document.querySelector("#mobileInfoBody");
+  const closeBtn=document.querySelector("#mobileInfoClose");
+
+  if(!modal || !title || !body || !closeBtn) return;
+
+  const mobileQuery=window.matchMedia("(max-width: 720px)");
+
+  function closeMobileInfo(){
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden","true");
+
+    document.body.classList.remove("mobile-info-open");
+
+    title.textContent="";
+    body.innerHTML="";
+  }
+
+  function openMobileInfo(infoButton){
+
+    if(!mobileQuery.matches) return;
+
+    const tooltip=infoButton.querySelector(".tooltip");
+
+    if(!tooltip) return;
+
+    /*
+     * Existing tooltip structure begins with <strong>Title</strong>.
+     * Reuse that content instead of duplicating explanatory text.
+     */
+    const strong=tooltip.querySelector("strong");
+
+    title.textContent=
+      strong ? strong.textContent.trim() : "About this estimate";
+
+    const clone=tooltip.cloneNode(true);
+
+    const cloneStrong=clone.querySelector("strong");
+
+    if(cloneStrong){
+      cloneStrong.remove();
+    }
+
+    body.innerHTML=clone.innerHTML.trim();
+
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden","false");
+
+    document.body.classList.add("mobile-info-open");
+
+    closeBtn.focus({
+      preventScroll:true
+    });
+  }
+
+  document.querySelectorAll(".info").forEach(infoButton=>{
+
+    infoButton.addEventListener("click",event=>{
+
+      if(!mobileQuery.matches) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      openMobileInfo(infoButton);
+    });
+
+  });
+
+  closeBtn.addEventListener(
+    "click",
+    closeMobileInfo
+  );
+
+  modal
+    .querySelectorAll("[data-close-mobile-info]")
+    .forEach(element=>{
+      element.addEventListener(
+        "click",
+        closeMobileInfo
+      );
+    });
+
+  document.addEventListener("keydown",event=>{
+    if(
+      event.key==="Escape" &&
+      modal.classList.contains("is-open")
+    ){
+      closeMobileInfo();
+    }
+  });
+
+  mobileQuery.addEventListener?.("change",event=>{
+    if(!event.matches){
+      closeMobileInfo();
+    }
+  });
+
+})();

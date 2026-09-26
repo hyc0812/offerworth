@@ -18,7 +18,7 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <title>OfferWorth — Compare Canadian Job Offers by Take-Home Pay</title>
   <meta name="description" content="Compare two Canadian job offers by estimated take-home pay.">
-  <link rel="stylesheet" href="css/style.css?v=0.7.9">
+  <link rel="stylesheet" href="css/style.css?v=0.7.10">
 <link rel="canonical" href="https://offerworth.app/">
 <meta property="og:url" content="https://offerworth.app/">
 <meta property="og:type" content="website">
@@ -212,7 +212,7 @@
       </div>
 </footer>
 
-  <script src="js/app.js?v=0.7.9"></script>
+  <script src="js/app.js?v=0.7.10"></script>
 <footer class="site-footer">
   <div class="footer-inner">
     <p><strong>About this estimate</strong></p>
@@ -221,6 +221,36 @@
     <p class="footer-meta">2026 tax year · Canada · OfferWorth</p>
   </div>
 </footer>
+
+
+  <!-- V0.7.10: mobile information modal -->
+  <div id="mobileInfoModal"
+       class="mobile-info-modal"
+       aria-hidden="true">
+
+    <div class="mobile-info-backdrop"
+         data-close-mobile-info></div>
+
+    <div class="mobile-info-dialog"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="mobileInfoTitle">
+
+      <button
+        id="mobileInfoClose"
+        class="mobile-info-close"
+        type="button"
+        aria-label="Close information">
+        ×
+      </button>
+
+      <h3 id="mobileInfoTitle"></h3>
+
+      <div id="mobileInfoBody"
+           class="mobile-info-body"></div>
+
+    </div>
+  </div>
 
 </body>
 </html>
